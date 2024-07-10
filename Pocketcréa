@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Créativité</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .options {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pocketcréa</h1>
+    <div class="options">
+        <label>
+            <input type="checkbox" id="generateMots" checked> Mots
+        </label>
+        <label>
+            <input type="checkbox" id="generateCouleurs" checked> Couleurs
+        </label>
+        <label>
+            <input type="checkbox" id="generateStyle" checked> Style
+        </label>
+        <br>
+        <label>
+            Nombre de couleurs : 
+            <input type="number" id="nombreCouleurs" min="1" max="5" value="3">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="secondaires"> Utiliser les couleurs secondaires
+        </label>
+        <br>
+        <label>
+            URL : 
+            <input type="text" id="qrUrl" placeholder="Entrez l'URL pour le QR code">
+        </label>
+    </div>
+    <button onclick="generateRandom()">Générer</button>
+    <div id="result" class="result"></div>
+
+    <script>
+        const animaux = ["Chien", "Chat", "Cheval", "Vache", "Mouton", "Lapin", "Oiseau", "Poisson", "Serpent", "Grenouille"];
+        const vegetaux = ["Chêne", "Pin", "Érable", "Rosier", "Tulipe", "Lavande", "Palmier", "Fougère", "Bambou", "Pissenlit"];
+        const vehicules = ["Voiture", "Moto", "Vélo", "Camion", "Bus", "Tram", "Train", "Avion", "Bateau", "Scooter"];
+        const materiaux = ["Bois", "Métal", "Plastique", "Verre", "Céramique", "Béton", "Papier", "Tissu", "Pierre", "Caoutchouc"];
+        const mots = [...animaux, ...vegetaux, ...vehicules, ...materiaux];
+
+        const couleursPrimaires = ["Rouge", "Bleu", "Jaune"];
+        const couleursSecondaires = ["Vert", "Orange", "Violet"];
+
+        const styles = ["Impressionnisme", "Cubisme", "Surréalisme", "Réalisme", "Expressionnisme", "Abstrait", "Art Déco", "Pop Art", "Minimalisme", "Street Art"];
+
+        function getRandomElements(arr, num) {
+            const shuffled = arr.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, num);
+        }
+
+        function generateRandom() {
+            const generateMots = document.getElementById("generateMots").checked;
+            const generateCouleurs = document.getElementById("generateCouleurs").checked;
+            const generateStyle = document.getElementById("generateStyle").checked;
+            const nombreCouleurs = parseInt(document.getElementById("nombreCouleurs").value);
+            const useSecondaires = document.getElementById("secondaires").checked;
+            const qrUrl = document.getElementById("qrUrl").value;
+
+            let resultHtml = "";
+
+            if (generateMots) {
+                const randomMots = getRandomElements(mots, 3);
+                resultHtml += `<p><strong>Mots :</strong> ${randomMots.join(", ")}</p>`;
+            }
+
+            if (generateCouleurs) {
+                const couleurs = useSecondaires ? [...couleursPrimaires, ...couleursSecondaires] : couleursPrimaires;
+                const randomCouleurs = getRandomElements(couleurs, nombreCouleurs);
+                resultHtml += `<p><strong>Couleurs :</strong> ${randomCouleurs.join(", ")}</p>`;
+            }
+
+            if (generateStyle) {
+                const randomStyle = getRandomElements(styles, 1)[0];
+                resultHtml += `<p><strong>Style :</strong> ${randomStyle}</p>`;
+            }
+
+            if (qrUrl) {
+                resultHtml += `<p><strong>QR Code URL :</strong> <a href="${qrUrl}" target="_blank">${qrUrl}</a></p>`;
+            }
+
+            document.getElementById("result").innerHTML = resultHtml;
+        }
+    </script>
+</body>
+</html>
